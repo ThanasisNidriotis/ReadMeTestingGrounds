@@ -35,10 +35,10 @@ This program has as its main function the calculation of the Aliquot Sequence of
 
 Specifically:
  - The user is requested to input a positive integer number smaller than 10^15
- - The user is requested for the maximum length of the aliquot sequence they want the program to print.For instance if the user wants to get first 3 numbers for the aliquote sequence of 12 the program would print, besides the original number of the sequence, 16 , 15 , 9.In case the user inputs 0, the sequence runs either until it reaches 1 and it terminates, or for an unlimted length (in case of a perfect, amicable or social number, the sequence runs until the number exceeds 10^15 or the program is forced to terminate).
+ - The user is requested for the maximum length of the aliquot sequence they want the program to print.For instance if the user wants to get first 3 numbers for the aliquote sequence of 12 the program would print, besides the original number of the sequence,16,15,9 .In case the user inputs 0, the sequence runs either until it reaches 1 and it terminates, or for an unlimted length (in case of a perfect, amicable or social number, the sequence runs until the number exceeds 10^15 or the program is forced to terminate).
  - Lastly the user is asked to input the character 'f' for the **full length** of the sequence or the character 'l' for just the **length** of the sequence. 
 
- ## How does this program accomplish the calculation of the Aliquot sequence?
+ ### How does this program accomplish the calculation of the Aliquot sequence?
 ``` c
     The program uses the following function:
 
@@ -60,19 +60,14 @@ Specifically:
 1. The algorithm takes the number the user inputs and store it in the variable **aliquot_number**.
 
 2. Afterwards using the for(..) loop, it checks positive integers starting from 1 until it reaches the factor that is equal to or surpasses the root of the aliquot number.
-The reason this was choosen is because according to mathematics a number cant have a a factor which is greater than it's root.This way regarding very large numbers we eliminate unnecessary calculations that may hinder the efficiency and speed of the program.
+The reason this was choosen is because according to mathematics a [composite number](https://en.wikipedia.org/wiki/Composite_number) cant have a a divisor which is greater than it's root.This way regarding very large numbers we eliminate unnecessary calculations that may hinder the efficiency and speed of the program.
 
-3. The algorithm then checks for each number whether it is a proper divisor of the aliquot_number and then proceeds to add to the sum **the factor being tested and the result of the divison of the aliquot_number with the divisor**.This is done because the the result of the division is also a factor of the aliquot_number.(For example the number 12 has as a factor the number 2. The result of the division of the former with the latter is the number 6 which is also a factor of 12).By doing this in addition to using the root method for calculating the factors, we add any possible factors the algorithm would miss otherwise.
+3. The algorithm then checks for each number whether it is a proper divisor of the aliquot_number and then proceeds to add to the sum **the divisor being tested and the result of the divison of the aliquot_number with the divisor**.This is done because the the result of the division is also a divisor of the aliquot_number.(For example the number 12 has as a divisor the number 2. The result of the division of the former with the latter is the number 6 which is also a factor of 12).By doing this in addition to using the root method for calculating the factors, we add any possible factors the algorithm would miss otherwise.
 
 4. Lastly the function checks whether the factor that breaks the loop is equal to the root of the aliquot_number and is added only a single time (because 
 otherwise we would add the save value twice since aliquot_number/step = step ) and it also removes from the sum the aliquot_number because we start the loop from 1 and as such we add the number to the sum from the aliquot_number/step equation.
 
 ## :arrow_down: How to compile and execute this program
-First of all to download the program to your device you need to go to your terminal and clone the repository in which it resides.To do that you need to input the following command:
-```bash
-git clone git@github.com:progintro/hw0-ThanasisNidriotis.git
-```
-
 
 To compile this program,after downloading the file,you need to compile it using the gcc compiler and inputing this line of code in the terminal of your device:
 ```
@@ -85,7 +80,7 @@ This way you may execute the program by typing the command
 ```
 
 
-# 3. Test runs, expected results and errors.
+# 3.:warning: Test runs, expected results and errors.
 
 This program ,like the previous chapters mention, calculates the aliquot sequence, according to a specific number the user inputs in combination with the inputs regarding the length of the sequence and the whether the user wants the full sequence or just the length.
 
@@ -97,6 +92,22 @@ This program expects the user to input a specific type of character after being 
 
 3. The last input needs to be either the character **'f'** or the character **'l'**
 
-#### Example: [![asciicast](https://asciinema.org/a/WejpFXSRzpkZbD0lMzzD6Tpbh.svg)](https://asciinema.org/a/WejpFXSRzpkZbD0lMzzD6Tpbh)
- 
- 
+##### Example: If the user inputs the number 12 as the number to start the sequence from, the length being unlimited (input being 0) and printing the full length.[![asciicast](https://asciinema.org/a/WejpFXSRzpkZbD0lMzzD6Tpbh.svg)](https://asciinema.org/a/WejpFXSRzpkZbD0lMzzD6Tpbh)
+
+In the scenario where the user inputs something that is outside the parameters given by the program, the execution stops and the program returns an exit code of 1
+
+#### Example:If the user inputs a number greater than 10^15 or inputs an alphabetical character for the first 2 inputs. [![asciicast](https://asciinema.org/a/pIsWN60t5tnHnmRH6G68r5Tok.svg)](https://asciinema.org/a/pIsWN60t5tnHnmRH6G68r5Tok)  
+
+Lastly, in the case where the user inputs a number like 276, when the sequence reaches a number that exceeds 10^15 it also stops and returns an exit code of 1.
+
+#### Important note
+In this program i use the header library called **stdio.h** as it allows me to use *printf* function to print my results and *scanf* function so the user can input their desired numbers and characters.
+The unfortunate thing is that due to the nature of *scanf* the user ought to be wary of what they input because, if for example they input the alphanumeric character 22f, the program will do the following:[![asciicast](https://asciinema.org/a/ST2bH30cv19xlxVs2rw8fwh9l.svg)](https://asciinema.org/a/ST2bH30cv19xlxVs2rw8fwh9l).
+As you can see the program stops but bugs out, I havent found a way for this to not happen so I Leave this as a note to the user
+
+I hope you find this program useful:grinning:!
+
+----------------------------------------------------
+#### Some Sources: 
+[Aliquot number](https://share.google/9UYIIg9QBtyaYaeFp)
+[A youtube video which helped me understand the sequence](https://www.youtube.com/watch?v=OtYKDzXwDEE&t=3s)
