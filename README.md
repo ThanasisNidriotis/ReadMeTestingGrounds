@@ -4,11 +4,15 @@ Welcome to the README for the Aliquot Sequence Program.
 
 This program was created for the execution of the mathematical sequence called the [Aliquot Sequence](https://en.wikipedia.org/wiki/Aliquot_sequence).
 
-## Table of Contents
-- [1.What is the Aliquot Sequence?](#1-what-is-the-aliquot-sequence)
-- [2.What does the program accomplish?](#2-what-does-the-program-accomplish)
 
+ ## Table of contents:  
 
+- [1. What is the Aliquot Sequence?](#1-what-is-the-aliquot-sequence)  
+- [2. What does this program accomplish?](#2-what-does-this-program-accomplish)  
+	- [How does this program accomplish the calculation of  the Aliquot Sequence?](#how-does-this-program-accomplish-the-calculation-of-the-aliquot-sequence)  
+	- [:arrow_down: How to compile and execute this program](#arrow_down-how-to-compile-and-execute-this-program) 
+- [3. :warning: Test runs, expected results and errors](#3warning-test-runs-expected-results-and-errors)  
+- [Sources](#some-sources)
 
 
 
@@ -38,7 +42,7 @@ Specifically:
 
  Lastly there are certain numbers like the infamous *276* for whose aliquot sequence we do not know whether it terminates or ends in a repeating cycle.
 
- # 2. What does this program accomplish?
+# 2. What does this program accomplish?
 
 This program has as its main function the calculation of the Aliquot Sequence of a specific number which is requested by the user to input.The use can also choose some other options for the program to run.
 
@@ -47,7 +51,7 @@ Specifically:
  - The user is requested for the maximum length of the aliquot sequence they want the program to print.For instance if the user wants to get first 3 numbers for the aliquote sequence of 12 the program would print, besides the original number of the sequence,16,15,9 .In case the user inputs 0, the sequence runs either until it reaches 1 and it terminates, or for an unlimted length (in case of a perfect, amicable or social number, the sequence runs until the number exceeds 10^15 or the program is forced to terminate).
  - Lastly the user is asked to input the character 'f' for the **full length** of the sequence or the character 'l' for just the **length** of the sequence. 
 
- ### How does this program accomplish the calculation of the Aliquot sequence?
+### How does this program accomplish the calculation of the Aliquot sequence
 ``` c
     The program uses the following function:
 
@@ -76,20 +80,25 @@ The reason this was choosen is because according to mathematics a [composite num
 4. Lastly the function checks whether the factor that breaks the loop is equal to the root of the aliquot_number and is added only a single time (because 
 otherwise we would add the save value twice since aliquot_number/step = step ) and it also removes from the sum the aliquot_number because we start the loop from 1 and as such we add the number to the sum from the aliquot_number/step equation.
 
-## :arrow_down: How to compile and execute this program
+## :arrow_down: How to compile and execute this program  
+
+The user has to copy the repository where the file is by typing the following command inside of their terminal
+```bash
+git clone git@github:progintro/hw0-ThanasisNidriotis.git
+```
 
 To compile this program,after downloading the file,you need to compile it using the gcc compiler and inputing this line of code in the terminal of your device:
-```
+```bash
  gcc -O0 -m32 -Wall -Wextra -Werror -pedantic -o aliquot 
  aliquot.c
 ```
 This way you may execute the program by typing the command
-```
+```bash
 ./aliquot
 ```
 
 
-# 3.:warning: Test runs, expected results and errors.
+# 3. :warning: Test runs, expected results and errors.
 
 This program ,like the previous chapters mention, calculates the aliquot sequence, according to a specific number the user inputs in combination with the inputs regarding the length of the sequence and the whether the user wants the full sequence or just the length.
 
