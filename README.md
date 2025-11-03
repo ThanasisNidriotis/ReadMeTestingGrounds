@@ -6,6 +6,7 @@ This program was created for the execution of the mathematical sequence called t
 
 ## Table of Contents
 - [1.What is the Aliquot Sequence?](#1-what-is-the-aliquot-sequence)
+- [2.What does the program accomplish?](#2-what-does-the-program-accomplish)
 
 
 
