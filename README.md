@@ -4,6 +4,14 @@ Welcome to the README for the Aliquot Sequence Program.
 
 This program was created for the execution of the mathematical sequence called the [Aliquot Sequence](https://en.wikipedia.org/wiki/Aliquot_sequence).
 
+## Table of Contents
+- [1.What is the Aliquot Sequence?](#1-what-is-the-aliquot-sequence)
+
+
+
+
+
+
 # 1. What is the Aliquot Sequence?
 The Aliquot Sequence,in mathematics, is a sequence of positive integers in which each term is the sum of the [proper divisors](https://en.wikipedia.org/wiki/Divisor#proper_divisor) of the previous term. The sequence runs until it reaches the number 1, where it ends since the sum of the proper divisors of 1 is 0.
 
