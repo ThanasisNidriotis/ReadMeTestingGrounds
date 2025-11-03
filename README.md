@@ -123,7 +123,7 @@ In this program i use the header library called **stdio.h** as it allows me to u
 The unfortunate thing is that due to the nature of *scanf* the user ought to be wary of what they input because, if for example they input the alphanumeric character 22f, the program will do the following:[![asciicast](https://asciinema.org/a/ST2bH30cv19xlxVs2rw8fwh9l.svg)](https://asciinema.org/a/ST2bH30cv19xlxVs2rw8fwh9l).
 As you can see the program stops but bugs out, I havent found a way for this to not happen so I Leave this as a note to the user
 
-I hope you find this program useful:grinning:!
+I hope you find this program useful :grinning:!
 
 ----------------------------------------------------
 #### Some Sources: 
