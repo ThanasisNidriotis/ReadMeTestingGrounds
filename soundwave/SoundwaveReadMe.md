@@ -7,10 +7,15 @@ This program was created in order to do a variety of functions and edit and util
 - [1. What is a Wav/WAVE file?](#questionwhat-is-a-wavwave-file)
 - [2.What does this program accomplish?](#what-does-this-program-accomplish)
     - [:clipboard:Info](#clipboard-info)
+        - [How to run info](#how-to-run-info)
     - [:timer_clock:Rate](#timer_clock-rate)
+        - [How to run rate](#how-to-run-rate)
     - [:train:Channel](#train-channel)
+        - [How to run channel](#how-to-run-channel)
     - [:loud_sound:Volume](#loud_sound-volume)
+        - [How to run volume](#how-to-run-volume)
     - [:bulb:Generate](#bulbgenerate)
+        - [How to run generate](#how-to-run-generate)
 - [:mag:3.Libraries used, Compiler and How to run!](#mag-3--libraries-used-compiler-and-how-to-run)
 - [Sources](#sources)
 
@@ -28,18 +33,18 @@ Specifically there is :
 #### :clipboard: Info
 -  The **Info** subprogram, which receives as input a ***.wav*** file and prints out the contets of the FileHeader also doing error handling and printing out for the user in case the wav file he inputs is either missing an important part of the FileHeader(Like the type of WAVE format) or whether there is incorrect information( Like there being data past the expected size of file).
     ##### :warning: List of error cases:
-    I. In the case the characters "RIFF" are not present
-    II. In the case the characters "WAVE" are not present
-    III. In the case the characters "fmt " are not present
-    IV. In the case the size of format chunk isn't 16
-    V. the case the WAVE format isn't 1 
-    VI. In the case instead of the value of 1(For mono) and 2(for stereo) the file has some other value(Like 3 for example)
-    VII. In the case the bytes per second arent equal to: sample rate X block alignment
-    VIII. In the case the bits per sample arent 8 or 16
-    IX. In the case the block alignment does not equal to: bits per sample/8 X Mono/Stereo
-    X. In the case the characters "data" are not present
-    XI. In the case there is an insufficient number of samples 
-    XII. In the case there is data past the expected end of file.
+    - I. In the case the characters "RIFF" are not present
+    - II. In the case the characters "WAVE" are not present
+    - III. In the case the characters "fmt " are not present
+    - IV. In the case the size of format chunk isn't 16
+    - V. the case the WAVE format isn't 1 
+    - VI. In the case instead of the value of 1(For mono) and 2(for stereo) the file has some other value(Like 3 for example)
+    - VII. In the case the bytes per second arent equal to: sample rate X block alignment
+    - VIII. In the case the bits per sample arent 8 or 16
+    - IX. In the case the block alignment does not equal to: bits per sample/8 X Mono/Stereo
+    - X. In the case the characters "data" are not present
+    - XI. In the case there is an insufficient number of samples 
+    - XII. In the case there is data past the expected end of file.
     #### Normal info output!
     ![Good wav](gif_folder/goodwav.gif)
 
@@ -49,7 +54,8 @@ Specifically there is :
 
     #### How does the Info subprogram accomplish this?
     Info manages to check whether the wav file is of the correct format and whether something is missing by using a number of integrated C functions and some others that I came up with.
-     Integrated functions used:
+     
+    Integrated functions used:
      - Getchar()in order to read the actual bytes that are inputed from the wav file.
      - fprintf() in order to output both in the stdout and stderr streams, the actual info  and the errors respectively.
      - Strcmp() in order to compare strings.
@@ -70,7 +76,7 @@ Specifically there is :
     }
 
     ```
-    Which receives as an argument a string or the "Word" we want to make sure is in the file, and prints an error if it compares the existing bytes with the expected ones finds any differences.
+    Which receives as an argument a string or the "Word" we want to make sure is in the file, and prints an error if it compares the existing bytes with the expected ones and finds any differences.
     ``` C
         // The converting bytes function//
         int32_t converting(int8_t num){
@@ -87,11 +93,18 @@ Specifically there is :
     This functions has as its goal the converting of the bytes it reads, from the [Little-endian format](https://en.wikipedia.org/wiki/Endianness). 
     Specifically it receives as an argument the number of bytes it will be converting. It then reads from the stream with getchar() 1 byte at a time and by using the bitwise OR (|) operator in combination with  shifting each number 8 bits to the left it manages to convert any number from little-endian to normal hexadecimal.
     **This** is done due to the fact with the bitwise OR operator ,the current numbers bits are ***"fused"*** with the fusion of all the previous ones!
+
+### How to run info?
+To execute info ,after compiling run the following command inside your terminal
+```
+./soundwave info < your_file_name.wav
+```
+This will print the information about your wav file inside of your terminal.
     <br>
 
 
 ### :timer_clock: Rate
--  The **rate** subprogram, receives as input a ***wav*** file and as a second argument a float type of number and returns as output the speed up or slowed down version of the inputed wav file. In addition to that, it also checks with some slight error handling, whether the wav file is of the correct form (similar to the info subprogram).
+-  The **rate** subprogram, receives as input a ***wav*** file and as a second argument a float type  number and returns as output the speed up or slowed down version of the inputed wav file. In addition to that, it also checks with some slight error handling, whether the wav file is of the correct form (similar to the info subprogram).
     #### Examples
     Case 1: A file has its rate increased by 2.0(double the rate).
     ![Rate_2.0](gif_folder/rate_2.0.gif)
@@ -104,8 +117,9 @@ Specifically there is :
      - Getchar()
      - Putchar()
      - fprintf()
+
      Which are used in the same way as in the Info subprogram.
-     - atoi() / atof() which are used in order to convert the string the user inputs as a second argument, into a either an integer for atoi() or a double for atof()
+     - strtod() which is used in order to convert the string the user inputs as a second argument, into a double.
 
 
 
@@ -134,10 +148,18 @@ Specifically there is :
     ```
 
     This functions, has a very important task. To take as arguments both a variable of either 32 or 16 bits(to_be_converted) and an argument for the amount of bytes it works with(num) and convert them into little endian and return them as output for the new wav file.
-    This is done by shifting the first argument i*8 bits right and using the the bitwise operator AND(&) to keep the first 8 bits (1 byte) and lastly using putchar() to output the value.This process repeats a (num) amount of times and by doing this i manage to output values like the : Size of File, the Size of Data, the Mono/Stereo value etc.
+    This is done by shifting the first argument i*8 bits right and using the the bitwise operator AND(&) to keep the first 8 bits (1 byte) and lastly using putchar() to output the value.This process repeats a (num) amount of times and by doing this I manage to output values like the : Size of File, the Size of Data, the Mono/Stereo value etc.
     <br>
 
     Lastly ***rate*** modifies the SampleRate and the Bytes per Second by multipling them with the second argument the user inputs after the *rate* argument.
+
+### How to run rate?
+To execute rate,after compiling, run the following command inside your terminal , and input where fp_rate is the rate you want to increase or decrease the program by(The rate must be a positive number).
+```
+./soundwave rate fp_rate < your_file_name1.wav > your_file_name2.wav
+
+```
+This will place the changed file you input ,with the changed rate ,into the second file you designate as output.
     <br>
 
 
@@ -148,31 +170,43 @@ Specifically there is :
     ![Channel left](gif_folder/channel_right.gif)
 
     #### How does the Channel subprogram accomplish this?
-    Channel manages to do this by modifing a number of bytes and samples of the original .wav file. 
-    Specifically ,regarding the bytes ,when the .wav file is of the Stereo type, the "Bytes per Second" , "block alingment" and the "Size of Data" are cut in half(divided by 2) while the Size of File is reduced by the now halved Size of Data.Lastly the Mono/Stereo format is converted from Stereo to Mono in this case.
-    On the other hand,regarding the SampleData, the subprogram, chooses, when the bits per sample equal 8, Using a loop , a single sample (1 byte) from the left or a single sample (1byte) from the right and returns it as output for the new .wav file, until it reaches the EOF part of the original input.When the bits per sample equal 16, the subprogram chooses 2 bytes (1 sample) either from the left, or from the right as a pair, and outputs them into the new .wav file similary to the 8bits per sample case.
+   -  Channel manages to do this by modifing a number of bytes and samples of the original .wav file. 
+    - Specifically ,regarding the bytes ,when the .wav file is of the Stereo type, the "Bytes per Second" , "block alingment" and the "Size of Data" are cut in half(divided by 2) while the Size of File is reduced by the now halved Size of Data.Lastly the Mono/Stereo format is converted from Stereo to Mono in this case.
+    - On the other hand,regarding the SampleData, the subprogram, chooses, when the bits per sample equal 8, Using a loop , a single sample (1 byte) from the left or a single sample (1byte) from the right and returns it as output for the new .wav file, until it reaches the EOF part of the original input.
+    
+    - When the bits per sample equal 16, the subprogram chooses 2 bytes (1 sample) either from the left, or from the right as a pair, and outputs them into the new .wav file similary to the 8bits per sample case.
     ##### Functions used:
     Integrated C functions:
     - Getchar()
     - Putchar()
     - fprintf()
+
     Which are used in the same way as in the previous  subprograms.
 
     Functions made for previous subprograms:
      - inputing_endianess()
      - inputing_words()
+
      Which execute the same tasks as in the rate subprogram.
-    <br>
+
+### How to run channel?
+To Execute channel,after compiling, you need to run the following command inside your terminal inputing left or right where left_right is.
+```
+./soundwave channel left_right < your_file_name1.wav > your_file_name1.wav
+```
+This will place the changed file you input ,with the sound coming from a single channel , into the second file you designated as output.
+<br>
 
 ### :loud_sound: Volume
 -  The ***volume*** subprogram, receives like the previous ones a .wav file as input and as a secondary argument the double type number which corresponds to the increase or decrease in the volume of the file.Like all the subprograms besides it, it has some minor error handling for safety.
-Unlike the previous 3 subprograms, Volume doesnt change the FileHeader of the original file, and only changes the SampleData!
+    - Unlike the previous 3 subprograms, Volume doesnt change the FileHeader of the original file, and only changes the SampleData!
     
     #### Example:
     ![Volume!](gif_folder/volume.gif)
 
     #### How does the Volume subprogram accomplish this?
-    Volume manages this by multiplying the existing samples with the number given as a second argument.The key difference is whether the file has 8bits per sample or 16bits per sample.For the latter the volume has an increased range that the former doesnt have and that makes the execution for each different.
+    - Volume manages this by multiplying the existing samples with the number given as a second argument.
+    - The key difference is whether the file has 8bits per sample or 16bits per sample.For the latter the volume has an increased range of sound that the former lacks and that makes the execution for each different.
 
     ##### Functions used:
     Integrated C functions:
@@ -181,12 +215,21 @@ Unlike the previous 3 subprograms, Volume doesnt change the FileHeader of the or
     - fprintf()
     - atof()
     - atoi()
+
     Which are used in the same way as in the previous  subprograms.
 
     Functions made for previous subprograms:
      - inputing_endianess()
      - inputing_words()
+
      Which execute the same tasks as in the rate subprogram.
+
+### How to run volume?
+To execute volume,after compiling, you need to run the following command inside your terminal while replacing volume_num with a number of your choosing 
+ ```
+./soundwave volume volume_num < your_file_name1.wav>your_file_name2.wav
+ ```
+This will place the changed file you input, with the changed volume into the second file you designated as output.
      <br>
 
 ### :bulb:Generate
@@ -198,13 +241,13 @@ The user besides the argument of generate, can input 6 different values by writi
 
 --sr int_sr: Which determines the Sample rate of the file(An integer).Default: 44100.
 
---fm fp_fm:Which determines the frequency modulation of the signal (a double).Default: 2.0.
+--fm fp_fm: Which determines the frequency modulation of the signal (a double).Default: 2.0.
 
---fc fp_fc Which determines the carrier frequency of the signal (a double).Default: 1500.0.
+--fc fp_fc: Which determines the carrier frequency of the signal (a double).Default: 1500.0.
 
 --mi fp_mi: Which determines the modulation index of the signal (a double).Default: 100.0.
 
---amp fp_amp:Which determines the amplitude of the signal (a double).Default: 30000.0.
+--amp fp_amp: Which determines the amplitude of the signal (a double).Default: 30000.0.
 
 The sound is produced in Mono(a single channel) and using 16bits per sample.
 
@@ -239,6 +282,19 @@ They are calculated like this:
      - inputing_endianess()
      - inputing_words()
      Which execute the same tasks as in the rate subprogram.
+
+### How to run generate
+    To execute generate,after compiling, you need to run the following command/s or any variation of them inside your terminal changing the values as you see fit.
+    ```
+    ./soundwave generate > your_file_name.wav
+    ./soundwave generate --dur optional_value > your_file_name.wav
+    ./soundwave generate --sr optional_value > your_file_name.wav
+    ./soundwave generate --fm optional_value > your_file_name.wav
+    ./soundwave generate --fc optional_value > your_file_name.wav
+    ./soundwave generate --mi optional_value > your_file_name.wav
+    ./soundwave generate --amp optional_value > your_file_name.wav
+    ```
+    You can also used a combination of these commands, combaning them to generate a different sound,according to the equation stated above.
     <br>
 -----------------------------------------------------------
 ## :mag: 3 . Libraries used, Compiler and How to run!
