@@ -16,6 +16,9 @@ This program was created in order to do a variety of functions and edit and util
         - [How to run volume](#how-to-run-volume)
     - [:bulb:Generate](#bulbgenerate)
         - [How to run generate](#how-to-run-generate)
+    - [:crystal_ball:DJ](#crystal_balldj)
+        - [What is a ByteBeat?](#what-is-a-bytebeat)
+        - [How to run DJ](#how-to-run-dj)   
 - [:mag:3.Libraries used, Compiler and How to run!](#mag-3--libraries-used-compiler-and-how-to-run)
 - [Sources](#sources)
 
@@ -58,22 +61,22 @@ Specifically there is :
     Integrated functions used:
      - Getchar()in order to read the actual bytes that are inputed from the wav file.
      - fprintf() in order to output both in the stdout and stderr streams, the actual info  and the errors respectively.
-     - Strcmp() in order to compare strings.
+     - Strncmp() in order to compare strings.
     
     Functions made for the specific program:
     ``` C
         //The Reading_Words function//
         int8_t reading_Words(char x[5]){
-     char Words[5];               
-    for ( int i= 0; i<4; i++){
-        Words[i]= getchar();
-    }
-    if( strcmp(x,Words) != 0){ 
-        fprintf(stderr,"Error! \"%s\" not found\n",x);
-        return 1;
-    }
-    return 0;
-    }
+            char Words[4];               
+            for ( int i= 0; i<4; i++){
+            Words[i]= getchar();
+            }
+            if( strncmp(x,Words,4) != 0){ 
+            fprintf(stderr,"Error! \"%s\" not found\n",x);
+            return 1;
+            }
+            return 0;
+        }
 
     ```
     Which receives as an argument a string or the "Word" we want to make sure is in the file, and prints an error if it compares the existing bytes with the expected ones and finds any differences.
@@ -284,8 +287,8 @@ They are calculated like this:
      Which execute the same tasks as in the rate subprogram.
 
 ### How to run generate
-    To execute generate,after compiling, you need to run the following command/s or any variation of them inside your terminal changing the values as you see fit.
-    ```
+To execute generate,after compiling, you need to run the following command/s or any variation of them inside your terminal changing the values as you see fit.
+```
     ./soundwave generate > your_file_name.wav
     ./soundwave generate --dur optional_value > your_file_name.wav
     ./soundwave generate --sr optional_value > your_file_name.wav
@@ -293,9 +296,114 @@ They are calculated like this:
     ./soundwave generate --fc optional_value > your_file_name.wav
     ./soundwave generate --mi optional_value > your_file_name.wav
     ./soundwave generate --amp optional_value > your_file_name.wav
-    ```
-    You can also used a combination of these commands, combaning them to generate a different sound,according to the equation stated above.
-    <br>
+```
+You can also used a combination of these commands, combaning them to generate a different sound,according to the equation stated above.
+<br>
+
+
+### :crystal_ball:DJ
+The ***Dj*** subprogram is an interesting case, similar to the generate subprogram. It doesnt receive a wav file as input but instead produces a hardcoded wav file with a beat made out of bytes.
+This is commonly known as a ByteBeat.
+## :warning:Disclaimer
+Most of the thing I mention from this point on, are based on the findings and documentations of 2 different sources I used in order to understad ByteBeats.
+Namely the sources I used are:
+- 1 [The blog post of user Viznut on CounterComplex](https://countercomplex.blogspot.com/2011/10/algorithmic-symphonies-from-one-line-of.html)
+- 2 [The Beginner guide to ByteBeats by The Tuesday Night Machines(TTNM for short)](https://nightmachines.tv/downloads/Bytebeats_Beginners_Guide_TTNM_v1-5.pdf)
+#### What is a ByteBeat?
+The term ByteBeat originates, to my knowledge, from Viznut's original blog regarding this concept.
+In greater detail, a ByteBeat is , as the name implies, a Beat, or to be more specific a bit stream, that is comprised of ,usually, short sentances of code written in c.
+Example:
+```c
+    t*(t>>12)&64
+```
+
+- This sentances use only 1 predetermined variable (in this case t)
+- They use only operators(mathematical,logical,bitwise,relational)
+- They use constant numbers(12,64,128 etc.)
+The code runs on an 8bit 8-kHz channel (in Viznut's videos on youtube, it runs on a PCM Channel,but for the purposes of this program, on a wav file with a Sample Rate equal to 8000 and an 8 bit per sample format.)
+#### How do the operators work?
+I will explain in brief how each operator works, what they change, and using them what is achieved.
+Most of the things said here are taken by TNNM's Guide which in my honest opinion is a must read for anyone interested(It contains all of the information i am about to mention in greater detail.)
+
+##### The variable t
+- The variable t on its own represents a sawtooth wave.
+It is called like this because,when represented on a graph, the audio looks like a sawtooth!
+- The variable 't' represents the time our ByteBeat is running on,meaning every second it increases by our sample rate (Which in this case is 8000).So in a single second 't' takes 8000 different values.This is very important as to why the variable is called a sawtooth wave, since the wave increases by 1 , 8 thousand times in a single second.
+But this on its own doesnt create an actual sound, just a constantly rising number.
+The reason it actually IS sawtooth wave is because in the wav file,it only inputs a single byte, meaning 8 bits, meaning 256 different values instead of 8000 (from 0 to 255).This makes it so when t has the values of 0 to 255, there is no abnormal behaivior but when t goes above 256, the byte overflows, and returns back to 0 and so on and so on.
+
+In the words of TTNM 
+```
+"So our counter t can grow way beyond 255 internally in our expression, but the expression’s
+result, processed through the 8 bit output, wraps around to 0 after 255, counts up to 255,
+then falls down to 0 again, counts up to 255, 
+back to 0 and so on. It’s a rising sawtooth!"
+```
+By multiplying t by a constant (for example t*30),we can decrease the time need for the sawtooth to come into effect (since instead of taking 256 samples to overflow,you can overflow on the 9th)
+##### Mathematical operators
+- (*)
+    The * operator is probably the most important operator for ALL ByteBeats.What it does, like mentioned above, is it increases the frequency of the sawtooth effect.
+
+- (/)
+    The / operator is the opposite of the * one, meaning instead of increasing the speed(frequency), it decreases the speed(frequency) of the sawtooth.
+- (+,-)
+    The +,- operators function similarly by adding and substracting respectively values from the sawtooth effect, alternating the position of the wave.
+- (%)
+    The % operator (modulo) is an interesting case, since what it does is limit the maximum value our wave can have,for example t%32 means the output has values that range from 0 to 31. In other words, with modulo we can create our own 'mini' sawtooth effects!
+##### Bitwise operators
+- (&)
+    The & operator has the effect of limiting the values of our wave, since , if for example you do t&64, the value will be either 64 or 0.This means we can create a so called "square wave" meaning we can change the interval at which the frequency repeats it self(By giving it the value of 0 for an extended period of time,no sound is produced,which is akin to a pause in the stream of sound.)Lastly, acurious property of an AND & operation is that the result cannot be larger than the smallest operand.
+
+- ( | )
+    The | operator has the opposite effect of the & operator meaning it "fuses" the bitwise values, and as an extension it becomes a sort of "audio mixer".Lastly property of OR that makes it behave so similar to an audio mixer, is that the results cannever be smaller than the smallest operand,
+
+- (^)
+    The ^ operator works in an underpredictable manner regarding soundwaves. It returns a value of 1 when the bits are non-matching and as such it isnt limited to the values it can have , unlike bitwise OR and bitwise AND.
+
+- (<<,>>)
+    The shifting operators have also some very important roles in bitwise management and ByteBeats. By shifting the value of t by 1(to the left or to the right),we essentialy increase/decrease the octave once! This makes sense since shifting is like multiplying/dividing by 2 for each bit we shift.
+
+##### Relational operators 
+- Relational operators find out whether a certain relation between
+two numbers is “true” or “false” and output 1 or 0 accordingly.
+This is very useful in many cases, for example when I wish to shift the second half of a beat once to the left, or when i wish to add an other sound effect to the beat.
+
+
+
+### What does DJ actually do?
+
+- The dj subprogram has as it's main function, the ability for the user to input a series of characters ranging from a to d (the program isnt case sensitive), where each character corresponds to a different ByteBeat. 
+- By typing out the sequence the user chooses, the dj subprogram receives said sequence,and depending on the number of characters the user inputs it produces a .wav file (like the previous subprograms do).
+- The duration is equal to the number of characters * 2 while the actual sound is a combination of the 4 different beats corresponding to one of the 4 characters,e.g if the user inputs the sequence "acad" and the sequence "cada"
+the resulting sound files will be different. On the other hand the sequences 
+"acab" and "AcaB" dont differ because the program isnt case sensitive.
+
+#### How does the dj subprogram accomplish this?
+Firstly, the user inputs a string, and the program then checks whether it's inside the set parameters. It then uses a switch-case inside of a for loop in order to output inside the wav file the sequence of bytes for the beat.
+
+- The file header is calculated in the exact same way as the generate subprogram.
+
+    ##### Functions used:
+    Integrated C functions:
+    - Getchar()
+    - Putchar()
+    - fprintf()
+    Which are used in the same way as in the previous  subprograms.
+    -  strlen  which is used in order to calculate the duration of the actual Beat.
+
+    Functions made for previous subprograms:
+     - inputing_endianess()
+     - inputing_words()
+     Which execute the same tasks as in the rate subprogram.
+### How to run DJ
+
+To execute generate,after compiling, you need to run the following command:
+```
+    ./soundwave dj your_string > your_file_name.wav
+```
+While replacing the your_string part with the string of your choice, which consists of a combination of the characters a,b,c or d.
+
+
 -----------------------------------------------------------
 ## :mag: 3 . Libraries used, Compiler and How to run!
 
